@@ -5,13 +5,13 @@ class inventory
 {
     string product;
     string product_type;
-    long long int Quantity;
-    long double Purchase_price;
-    long long int Purchase_itme;
+    long long int Quantity = 0;
+    long double Purchase_price = 0;
+    long long int Purchase_itme = 0;
     long long int sell_itme = 0;
-    long double Sell_price;
-    int product_key;
-    long double p_l;
+    long double Sell_price = 0;
+    int product_key = 0;
+    long double p_l = 0;
     // ------------------------------------- Friends-----------------
     friend void update(inventory &o);
     friend void update(inventory o[], string name, string type, int len);
@@ -42,6 +42,8 @@ public:
     void Show_item()
     {
         system("cls");
+        cout << "TIME: " << __TIME__ << endl
+             << "DATE: " << __DATE__ << endl;
         cout << "Product KEY : " << product_key << endl;
         cout << "Product Type: " << product_type << endl;
         cout << "Product Name: " << product << endl;
@@ -52,6 +54,35 @@ public:
         cout << "Total sell Quantity: " << sell_itme << endl;
         cout << "Total Profit/Loss by This product : " << p_l << " RS" << endl;
         cout << "Press Enter to continue...\n\n";
+        string s = product;
+        s += "_";
+        s += __DATE__;
+        s += "_Detail.txt";
+        char a;
+        getchar();
+        cout << "Press 1 For Get DETAIL in TEXT: ";
+        a = getchar();
+        if (a == '1')
+        {
+            cout << "Genrating Respit \n \t 100%\n ";
+            ofstream f;
+            f.open(s, std::fstream::__noreplace);
+            f << "\t||\t\t\tProduct Detail\t\t\t||\n"
+              << "=================================================================\n\n";
+            f << "TIME: " << __TIME__ << endl
+              << "DATE: " << __DATE__ << endl
+              << endl;
+            f << "Product KEY: " << product_key << endl;
+            f << "Product Type: " << product_type << endl;
+            f << "Product Name: " << product << endl;
+            f << "Purchase Price: " << Purchase_price << endl;
+            f << "Purchased item: " << Purchase_itme << endl;
+            f << "Selling Price: " << Sell_price << endl;
+            f << "Total Selling: " << sell_itme << endl;
+            f << "Total Quantity: " << Quantity << endl
+              << endl;
+            f << "PROFIT / LOSS: " << p_l << endl;
+        }
         getchar();
         getchar();
     }
@@ -166,6 +197,7 @@ void update(inventory o[], string name, string type, int len)
     system("cls");
 }
 // ---------------- Purchase Availabe Product----------------------------
+long long int jf = 0;
 void Purchase(inventory o[], string name, string type, int len)
 {
     system("cls");
@@ -174,15 +206,55 @@ void Purchase(inventory o[], string name, string type, int len)
         if (o[i].product_type == type && o[i].product == name)
         {
             int Purchase;
+            float p = o[i].Purchase_price;
             cout << "Enter Purchase Quantity: ";
             cin >> Purchase;
             o[i].Purchase_itme += Purchase;
-            cout << "Old Purchase Price is :" << o[i].Purchase_price << endl;
+            cout << "\nOld Purchase Price is :" << o[i].Purchase_price << endl;
             cout << "Enter New Purchase Price: ";
             cin >> o[i].Purchase_price;
             o[i].Quantity += Purchase;
             system("cls");
-            o[i].Show_item();
+            cout << "TIME: " << __TIME__ << endl
+                 << "DATE: " << __DATE__ << endl
+                 << endl;
+            cout << "Product KEY: " << o[i].product_key << endl;
+            cout << "Product Type: " << o[i].product_type << endl;
+            cout << "Product Name: " << o[i].product << endl;
+            cout << "OLD PURCHASE PRICE: " << p << endl;
+            cout << "NEW Purchase Price: " << o[i].Purchase_price << endl;
+            cout << "Purchased item: " << o[i].Purchase_itme << endl;
+            cout << "Total Quantity: " << o[i].Quantity << endl;
+            string s = o[i].product;
+            s += "_";
+            s += __DATE__;
+            s += "_";
+            s += to_string(jf);
+            jf++;
+            s += "_Purchase.txt";
+            char a;
+            a = getchar();
+            a = getchar();
+            cout << "Press 1 For Get DETAIL in TEXT: ";
+            a = getchar();
+            if (a == '1')
+            {
+                cout << "Genrating Respit \n \t 100%\n ";
+                ofstream f;
+                f.open(s, std::fstream::__noreplace);
+                f << "\t||\t\t\tProduct Purchase Detail\t\t\t||\n"
+                  << "=================================================================\n\n";
+                f << "TIME: " << __TIME__ << endl
+                  << "DATE: " << __DATE__ << endl
+                  << endl;
+                f << "Product KEY: " << o[i].product_key << endl;
+                f << "Product Type: " << o[i].product_type << endl;
+                f << "Product Name: " << o[i].product << endl;
+                f << "OLD PURCHASE PRICE: " << p << endl;
+                f << "NEW Purchase Price: " << o[i].Purchase_price << endl;
+                f << "Purchased item: " << o[i].Purchase_itme << endl;
+                f << "Total Quantity: " << o[i].Quantity << endl;
+            }
             return;
         }
     }
@@ -192,6 +264,7 @@ void Purchase(inventory o[], string name, string type, int len)
     system("cls");
 }
 // --------------- Sell Product ----------------------------------
+long long int ifile = 0;
 void sell(inventory o[], string name, string type, int len)
 {
     system("cls");
@@ -213,20 +286,83 @@ void sell(inventory o[], string name, string type, int len)
             o[i].Quantity -= sel;
             cout << "Enter Sell Price: ";
             cin >> se_price;
-            o[i].p_l += se_price - o[i].Purchase_price;
+            o[i].p_l += (se_price - (o[i].Purchase_price / o[i].Purchase_itme)) * sel;
             system("cls");
-            o[i].Show_item();
-            cout << "Original sell price: " << o[i].Sell_price << "\nCurrent sell Price is: " << se_price << "\nThe Total differance Between Original sel price: " << se_price - o[i].Sell_price << endl;
+            cout << "TIME: " << __TIME__ << endl
+                 << "DATE: " << __DATE__ << endl
+                 << endl;
+            cout << "Product KEY: " << o[i].product_key << endl;
+            cout << "Product Type: " << o[i].product_type << endl;
+            cout << "Product Name: " << o[i].product << endl;
+            cout << "Purchase Price: " << o[i].Purchase_price << endl;
+            cout << "Selling Price: " << o[i].Sell_price << endl;
+            cout << "Current Selling Price: " << se_price << endl;
+            if (o[i].Sell_price < se_price)
+            {
+                cout << "PROFIT: " << (se_price - o[i].Sell_price) * sel << endl;
+            }
+            else if (o[i].Sell_price > se_price)
+            {
+                cout << "DISCOUNT: " << (o[i].Sell_price - se_price) * sel << endl;
+            }
+            cout << "Total Selling: " << o[i].sell_itme << endl;
+            cout << "Total Quantity: " << o[i].Quantity << endl
 
-            return;
+                 << endl;
+            cout << "Total PROFIT / LOSS of This Product(According to Purcahse And Sell Price): " << o[i].p_l << endl;
+            string s = o[i].product;
+            s += "_";
+            s += __DATE__;
+            s += "_";
+            s += to_string(ifile);
+            ifile++;
+            s += "_Sell.txt";
+            char a;
+            getchar();
+            getchar();
+            cout << "Press 1 For Get DETAIL in TEXT: ";
+            a = getchar();
+            if (a == '1')
+            {
+                cout << "Genrating Respit \n \t 100%\n ";
+                ofstream f;
+                f.open(s, std::fstream::__noreplace);
+                f << "\t||\t\t\tProduct Detail\t\t\t||\n"
+                  << "=================================================================\n\n";
+                f << "TIME: " << __TIME__ << endl
+                  << "DATE: " << __DATE__ << endl
+                  << endl;
+                f << "Product KEY: " << o[i].product_key << endl;
+                f << "Product Type: " << o[i].product_type << endl;
+                f << "Product Name: " << o[i].product << endl;
+                f << "Purchase Price: " << o[i].Purchase_price << endl;
+                f << "Selling Price: " << o[i].Sell_price << endl;
+                f << "Current Selling Price: " << se_price << endl;
+                if (o[i].Sell_price < se_price)
+                {
+                    f << "PROFIT: " << (se_price - o[i].Sell_price) * sel << endl;
+                }
+                else if (o[i].Sell_price > se_price)
+                {
+                    f << "DISCOUNT: " << (o[i].Sell_price - se_price) * sel << endl;
+                }
+                f << "Total Selling: " << o[i].sell_itme << endl;
+                f << "Total Quantity: " << o[i].Quantity << endl
+                  << endl;
+                f << "Total PROFIT / LOSS of This Product(According to Purcahse And Sell Price): " << o[i].p_l << endl
+                  << endl;
+                f << "Total Ammount Recived: " << se_price * sel;
+                return;
+            }
         }
+        cout << "The Product Not Found !\n";
+        cout << "Press Enter to continue...\n\n";
+        getchar();
+        system("cls");
     }
-    cout << "The Product Not Found !\n";
-    cout << "Press Enter to continue...\n\n";
-    getchar();
-    system("cls");
 }
 // ----------------------- Show all -----------------------------------
+long long int df = 0;
 void al_show(inventory o[], int len)
 {
     system("cls");
@@ -246,6 +382,34 @@ void al_show(inventory o[], int len)
     cout << "===============================================================================================\n";
     cout << "The Total Stock is: " << t_stock << "\nThe Total Stock Purchase Price: " << t_purchase_p << " RS " << "\nTotal Stock Purchase item: " << t_purchase_i
          << "\nThe Total Stock Sell Price: " << t_sell_p << " RS " << "\nTotal Stock Sell item: " << t_sell_i;
+    getchar();
+    getchar();
+    string s = "";
+    s += "_";
+    s += __DATE__;
+    s += "_";
+    s+= to_string(df);
+    s += "_All Detail.txt";
+    char a;
+    a = getchar();
+    a = getchar();
+    cout << "Press 1 For Get ALL DETAIL in TEXT: ";
+    a = getchar();
+    ofstream f;
+    if (a == '1')
+    {
+        f.open(s, std::fstream::__noreplace);
+        f << "1. k = Key \n2. T = Product Type\n3. N = Product Name \n4. S_P = Sell Price\n5. S_I = Sell Item \n6. P_P = Purchase Price \n7. P_i = Purchase Item \n8. Q = Quantity\n\n";
+        f << " K " << setw(8) << " | " << setw(10) << " T " << setw(10) << " | " << setw(8) << " N " << setw(8) << " | " << setw(8) << " S_P " << setw(8) << " | " << setw(8) << " S_I " << setw(8) << " | " << setw(8) << " P_P " << setw(8) << " | " << setw(8) << " P_i " << setw(8) << " | " << setw(8) << " Q \n\n";
+        for (int i = 0; i < len; i++)
+        {
+            f << o[i].product_key << setw(5) << " | " << setw(5) << o[i].product_type << setw(5) << " | " << setw(5) << o[i].product << setw(5) << " | " << setw(5) << o[i].Sell_price << setw(5) << " | " << setw(5) << o[i].sell_itme << setw(5) << " | " << setw(5) << o[i].Purchase_price << setw(5) << " | " << setw(5) << o[i].Purchase_itme << setw(5) << " | " << setw(5) << o[i].Quantity << "\n\n\n";
+        }
+    }
+    f << "===============================================================================================\n";
+    f << "The Total Stock is: " << t_stock << "\nThe Total Stock Purchase Price: " << t_purchase_p << " RS " << "\nTotal Stock Purchase item: " << t_purchase_i
+      << "\nThe Total Stock Sell Price: " << t_sell_p << " RS " << "\nTotal Stock Sell item: " << t_sell_i;
+      df++;
     cout << "Press Enter to continue...\n\n";
     getchar();
     getchar();
@@ -272,13 +436,13 @@ int main()
     string firm;
     while (true)
     {
-        cout << "=====================================================================================================================================================\n";
+        cout << "===============================================================================================================================\n";
         cout << setw(80) << "Welcome to Inventory Management \n";
-        cout << "=====================================================================================================================================================\n\n\n";
-        cout << "Press Enter to continue...\n\n";
+        cout << "===============================================================================================================================\n";
+        cout << "Press Enter to continue...\n";
         getchar();
         system("cls");
-        cout << "Enter Your Command:- \n\n";
+        cout << "Enter Your Command:- \n";
         cout << "1. Purchase New Product         \t|\t 2. Show Product Detail         \n";
         cout << "3. Sell Availabe Product        \t|\t 4. Purchase Available Product  \n";
         cout << "5. Update product               \t|\t 6. Show All Stock Detail       \n";
@@ -305,11 +469,11 @@ int main()
             else if (a == 2)
             {
                 string name, type;
-                cout << "Enter Product Name: ";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                getline(cin, name);
                 cout << "Enter Product type: ";
                 getline(cin, type);
+                cout << "Enter Product Name: ";
+                getline(cin, name);
                 system("cls");
                 sh(item, type, name, i);
             }
@@ -330,11 +494,11 @@ int main()
             else if (a == 2)
             {
                 string name, type;
-                cout << "Enter Product Name: ";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                getline(cin, name);
                 cout << "Enter Product type: ";
                 getline(cin, type);
+                cout << "Enter Product Name: ";
+                getline(cin, name);
                 system("cls");
                 update(item, name, type, i);
             }
@@ -342,22 +506,22 @@ int main()
         else if (a == 4)
         {
             string name, type;
-            cout << "Enter Product Name: ";
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            getline(cin, name);
             cout << "Enter Product type: ";
             getline(cin, type);
+            cout << "Enter Product Name: ";
+            getline(cin, name);
             system("cls");
             Purchase(item, name, type, i);
         }
         else if (a == 3)
         {
             string name, type;
-            cout << "Enter Product Name: ";
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            getline(cin, name);
             cout << "Enter Product type: ";
             getline(cin, type);
+            cout << "Enter Product Name: ";
+            getline(cin, name);
             system("cls");
             sell(item, name, type, i);
         }
