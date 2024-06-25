@@ -14,13 +14,14 @@ class inventory
     long double p_l = 0;
     // ------------------------------------- Friends-----------------
     friend void update(inventory &o);
-    friend void update(inventory o[], string name, string type, int len);
-    friend void Purchase(inventory o[], string name, string type, int len);
-    friend void sell(inventory o[], string name, string type, int len);
-    friend void al_show(inventory o[], int len);
-    friend void sh(inventory o[], string t, string n, int l);
+    friend void update(vector<inventory>o, string name, string type, int len);
+    friend void Purchase(vector<inventory>o, string name, string type, int len);
+    friend void sell(vector<inventory>o, string name, string type, int len);
+    friend void al_show(vector<inventory>o, int len);
+    friend void sh(vector<inventory>o, string t, string n, int l);
 
 public:
+inventory(int a){}
     void store_product()
     {
         system("cls");
@@ -140,7 +141,7 @@ void update(inventory &o)
     system("cls");
 }
 // --------------------2. Name------------------------------------
-void update(inventory o[], string name, string type, int len)
+void update(vector<inventory>o, string name, string type, int len)
 {
     system("cls");
     for (int i = 0; i < len; i++)
@@ -198,7 +199,7 @@ void update(inventory o[], string name, string type, int len)
 }
 // ---------------- Purchase Availabe Product----------------------------
 long long int jf = 0;
-void Purchase(inventory o[], string name, string type, int len)
+void Purchase(vector<inventory>o, string name, string type, int len)
 {
     system("cls");
     for (int i = 0; i < len; i++)
@@ -265,7 +266,7 @@ void Purchase(inventory o[], string name, string type, int len)
 }
 // --------------- Sell Product ----------------------------------
 long long int ifile = 0;
-void sell(inventory o[], string name, string type, int len)
+void sell(vector<inventory>o, string name, string type, int len)
 {
     system("cls");
     for (int i = 0; i < len; i++)
@@ -363,16 +364,27 @@ void sell(inventory o[], string name, string type, int len)
 }
 // ----------------------- Show all -----------------------------------
 long long int df = 0;
-void al_show(inventory o[], int len)
+void al_show(vector<inventory>o, int len)
 {
+    int n  = 0 , j = 0;
+    for (int i = 0; i < len; i++)
+    {
+        if(n < o[i].product.length()){
+            n = o[i].product.length();
+        }
+        if(j < o[i].product_type.length()){
+            j = o[i].product_type.length();
+        }
+    }
+    
     system("cls");
     long long t_stock = 0;
     long double t_sell_i = 0, t_purchase_i = 0, t_sell_p = 0, t_purchase_p = 0;
     cout << "1. k = Key \n2. T = Product Type\n3. N = Product Name \n4. S_P = Sell Price\n5. S_I = Sell Item \n6. P_P = Purchase Price \n7. P_i = Purchase Item \n8. Q = Quantity\n\n";
-    cout << " K " << setw(8) << " | " << setw(15) << " T " << setw(15) << " | " << setw(10) << " N " << setw(10) << " | " << setw(10) << " S_P " << setw(10) << " | " << setw(10) << " S_I " << setw(10) << " | " << setw(10) << " P_P " << setw(10) << " | " << setw(10) << " P_i " << setw(10) << " | " << setw(10) << " Q \n\n";
+    cout << "K" << setw(5) << " | "<< "T" << setw(j+2) << " | "<< "N" << setw(n+2) << " | "<< "S_P" << setw(5) << " | "<< "S_I" << setw(5) << " | "<< "P_P" << setw(5) << " | " << "P_i" << setw(5) << " | "<< "Q\n\n";
     for (int i = 0; i < len; i++)
     {
-        cout << o[i].product_key << setw(5) << " | " << setw(5) << o[i].product_type << setw(5) << " | " << setw(5) << o[i].product << setw(5) << " | " << setw(5) << o[i].Sell_price << setw(5) << " | " << setw(5) << o[i].sell_itme << setw(5) << " | " << setw(5) << o[i].Purchase_price << setw(5) << " | " << setw(5) << o[i].Purchase_itme << setw(5) << " | " << setw(5) << o[i].Quantity << "\n\n\n";
+        cout << o[i].product_key << setw(5) << " | "<< o[i].product_type << setw(j-o[i].product_type.length()) << " | "<< o[i].product << setw(n-o[i].product.length()) << " | " << o[i].Sell_price << setw(5) << " | " << o[i].sell_itme << setw(5) << " | " << o[i].Purchase_price << setw(5) << " | "<< o[i].Purchase_itme << setw(5) << " | " << o[i].Quantity << "\n\n\n";
         t_stock += o[i].Quantity;
         t_sell_i += o[i].sell_itme;
         t_sell_p += o[i].Sell_price;
@@ -415,7 +427,7 @@ void al_show(inventory o[], int len)
     getchar();
 }
 // ------------------ show by name ---------------------------------------------
-void sh(inventory o[], string t, string n, int l)
+void sh(vector<inventory>o, string t, string n, int l)
 {
     for (int i = 0; i < l; i++)
     {
@@ -432,13 +444,12 @@ void sh(inventory o[], string t, string n, int l)
 }
 int main()
 {
-    inventory item[999];
-    string firm;
+    vector<inventory>item;
     while (true)
     {
-        cout << "===============================================================================================================================\n";
-        cout << setw(80) << "Welcome to Inventory Management \n";
-        cout << "===============================================================================================================================\n";
+        cout << "===================================================================================================\n";
+        cout <<"\t\t\t\t"<< "Welcome to Inventory Management \n";
+        cout << "===================================================================================================\n";
         cout << "Press Enter to continue...\n";
         getchar();
         system("cls");
@@ -451,6 +462,7 @@ int main()
         if (a == 1)
         {
             system("cls");
+            item.emplace_back(i);
             item[i].store_product();
             i++;
         }
